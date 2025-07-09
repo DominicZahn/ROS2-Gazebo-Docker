@@ -7,7 +7,7 @@ It only uses Docker and Make to manage the Docker. So this setup can be used dir
 ## Prerequirements
 - Docker
 - make
-- (optional) [NVIDIA Container Toolkit](https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/latest/install-guide.html)
+- (for NVIDIA GPUs) [NVIDIA Container Toolkit](https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/latest/install-guide.html)
 
 ## Useage
 ### Structure
@@ -35,10 +35,10 @@ The docker is managed by the [Makefile](/Makefile). The four commands bundle som
 | Command | Description |
 |---------|-------------|
 | `run` | launches the docker with `docker run` and enables X11-forwarding on the host machine |
-| `build` | only calls `docker build` with the correct container name |
-| `clean` | removes colcon artifacts in `ws` and deletes Docker from the internal list (**this needs sudo privileges**, because Docker had sudo permissions when creating those files). After cleaning up the Docker, a full `build` is necessary! |
+| `build` | - create `ws/src/` and adjust permissions <br>- calls `docker build` with the correct container name |
+| `clean` | removes colcon artifacts in `ws` and deletes Docker from the internal list (**this needs sudo privileges**, because Docker had sudo permissions when creating those files)<br> -> full `build` is necessary! |
 | `rebuild` | combination of `clean` and `build` without the use of cache |
-| `stop` | calls `docker stop`; can be used to stop the docker when the process where `run` was called is not accessible |
+| `stop` | can be used to stop the docker when the process where `run` was called is not accessible (calls `docker stop`) |
 
 Most of the time you will use `make build` once and then only launch the docker with `make run`.
 You only need to build or rebuild if you added some packages to the [Dockerfile](/Dockerfile).

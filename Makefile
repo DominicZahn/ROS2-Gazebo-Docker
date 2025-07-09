@@ -2,7 +2,6 @@ CONTAINER_NAME=ros2-jazzy
 GPU:=$(shell command -v nvidia-smi >/dev/null 2>&1 && echo true || echo false)
 build:
 	mkdir -p $(CURDIR)/ws/src
-	#sudo chmod -R 777 $(CURDIR)/ws
 	chmod -R o+rwx $(CURDIR)/ws
 	docker build -t $(CONTAINER_NAME) .
 

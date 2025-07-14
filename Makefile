@@ -17,6 +17,7 @@ run:
 		--net=host \
 		--mount type=bind,src=/tmp/.X11-unix,dst=/tmp/.X11-unix \
 		--mount type=bind,src=$(CURDIR)/ws,dst=/home/robot/ws \
+		--mount type=bind,src=$(CURDIR)/../pkgs,dst=/home/robot/ws/pkgs \
 		--privileged \
 		--name $(CONTAINER_NAME) \
 		$(CONTAINER_NAME)

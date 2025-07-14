@@ -13,20 +13,25 @@ It only uses Docker and Make to manage the Docker. So this setup can be used dir
 ### Structure
 ```
 .
-+-- ws
-|   +-- src
-|   |   +-- (*)
-|   |
-|   +-- build
-|   +-- install
-|   +-- log
+|-+-- ws
+| |   +-- src
+| |   |   +-- (*)
+| |   +-- pkgs
+| |   |   +-- (**)
+| |   |
+| |   +-- build
+| |   +-- install
+| |   +-- log
+| |
+| +-- Dockerfile
+| +-- Makefile
+| +-- .gitignore
+| +-- README.md
 |
-+-- Dockerfile
-+-- Makefile
-+-- .gitignore
-+-- README.md
++-- pkgs (**)
 
 (*) your ROS2 project goes here
+(**) place to put external pkgs in
 ```
 
 ### Docker Management
@@ -50,4 +55,5 @@ You can put all your projects and ROS2 packages inside the [src](/ws/src/) direc
 To build everything, the alias `build` can be used inside the container to move to the parent workspace folder (`ws`) and then execute `colcon build --symlink-install`. With this setup, the problem of creating random colcon artifacts is a thing of the past.
 
 ### Testing
-To test if everything is setup a correctly, it is recommended to clone the [QuadrupedA1Controller](https://github.com/faoezg/QuadrupedA1Controller/tree/main) repository inside the [src](/ws/src/) directory. Follow the instructions of the repository to see if the workspace behaves as expected.
+To test if everything is setup a correctly, it is recommended to clone the [ros2_heinz](https://github.com/K-d4wg/ros2_heinz.git) repository inside the [src](/ws/src/) directory. 
+Follow the instructions of the repository to see if the workspace behaves as expected.

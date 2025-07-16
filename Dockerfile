@@ -25,6 +25,7 @@ RUN apt-get update && apt-get install -y \
     ros-${ROS_DISTRO}-ros-gz-bridge \
     ros-${ROS_DISTRO}-ros2-control \
     ros-${ROS_DISTRO}-ament-cmake \
+    ros-${ROS_DISTRO}-joint-state-publisher-gui \
     python3-colcon-common-extensions \
     python3-vcstool
 

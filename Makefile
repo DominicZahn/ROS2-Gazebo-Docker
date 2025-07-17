@@ -1,4 +1,5 @@
-CONTAINER_NAME=ros2-jazzy
+ROS_DISTRO=jazzy
+CONTAINER_NAME=ros2-$(ROS_DISTRO)
 GPU:=$(shell command -v nvidia-smi >/dev/null 2>&1 && echo true || echo false)
 build:
 	mkdir -p $(CURDIR)/ws/src

@@ -2,8 +2,12 @@ CONTAINER_NAME=ros2-jazzy
 GPU:=$(shell command -v nvidia-smi >/dev/null 2>&1 && echo true || echo false)
 build:
 	mkdir -p $(CURDIR)/ws/src
-	chmod -R o+rwx $(CURDIR)/ws
-	docker build -t $(CONTAINER_NAME) .
+#	chmod -R o+rwx $(CURDIR)/ws
+	echo $(id -u) $(id -g)
+	docker build \
+		--build-arg UID=$(id -u) \
+		--build-arg GID=$(id -g) \
+		-t $(CONTAINER_NAME) .
 
 run:
 	xhost +local:docker
@@ -18,7 +22,6 @@ run:
 		--mount type=bind,src=/tmp/.X11-unix,dst=/tmp/.X11-unix \
 		--mount type=bind,src=$(CURDIR)/ws,dst=/home/robot/ws \
 		--mount type=bind,src=$(CURDIR)/../pkgs,dst=/home/robot/ws/pkgs \
-		--privileged \
 		--name $(CONTAINER_NAME) \
 		$(CONTAINER_NAME)
 stop:

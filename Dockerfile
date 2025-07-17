@@ -34,7 +34,12 @@ RUN rm -rf /var/lib/apt/lists/*
 ENV DEBIAN_FRONTEND=noninteractive
 
 # Create user robot
-RUN useradd -m -s /bin/bash robot && echo "robot ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
+ARG UID=1000 # set on run
+ARG GID=1000 # set on run
+RUN echo ${GID} ${UID}
+RUN groupadd -g ${GID} robot && \
+    useradd -m -u ${UID} -g ${GID} -s /bin/bash robot && \
+    echo "robot ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
 USER robot
 
 # Setup workspace

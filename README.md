@@ -57,3 +57,6 @@ To build everything, the alias `build` can be used inside the container to move 
 ### Testing
 To test if everything is setup a correctly, it is recommended to clone the [ros2_heinz](https://github.com/K-d4wg/ros2_heinz.git) repository inside the [src](/ws/src/) directory. 
 Follow the instructions of the repository to see if the workspace behaves as expected.
+
+# Work in Progress
+- [ ] remove `--privileged` and use suitable UID and GID for *robot* user

@@ -4,6 +4,8 @@ ENV ROS_DISTRO=jazzy
 # General packages
 RUN apt-get update && apt-get install -y \
     x11-apps \
+    gdb \
+    nano \
     tmux \
     htop \
     nvtop \
@@ -26,6 +28,8 @@ RUN apt-get update && apt-get install -y \
     ros-${ROS_DISTRO}-ros-gz-bridge \
     ros-${ROS_DISTRO}-ros2-control \
     ros-${ROS_DISTRO}-ament-cmake \
+    ros-${ROS_DISTRO}-tf2-ros \
+    ros-${ROS_DISTRO}-tf2-geometry-msgs \
     ros-${ROS_DISTRO}-joint-state-publisher-gui \
     python3-colcon-common-extensions \
     python3-vcstool
@@ -46,7 +50,7 @@ RUN echo "\
 export TERM=xterm-256color\n\
 source /opt/ros/${ROS_DISTRO}/setup.bash\n\
 source /home/robot/ws/install/setup.bash\n\
-alias build='cd /home/robot/ws/ && colcon build --symlink-install && source install/setup.bash'\n\
+alias build='cd /home/robot/ws/ && colcon build --parallel-workers 4 --symlink-install --cmake-args -DCMAKE_BUILD_TYPE=RelWithDebInfo && source install/setup.bash'\n\
 " >> /home/robot/.bashrc
 
 # GPU plugins in Gazebo

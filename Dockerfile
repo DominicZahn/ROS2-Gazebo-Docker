@@ -2,6 +2,7 @@ FROM ros:jazzy
 ENV ROS_DISTRO=jazzy
 
 # General packages
+SHELL ["/bin/bash", "-c" ]
 RUN apt-get update && apt-get install -y \
     x11-apps \
     gdb \
@@ -13,10 +14,7 @@ RUN apt-get update && apt-get install -y \
     sudo \
     wget \
     gnupg2 \
-    mesa-utils \
-    python3-pip \
-    python-is-python3 \
-    python3-pygame
+    mesa-utils
 
 # ROS2 packages
 RUN apt-get update && apt-get install -y \
@@ -45,13 +43,28 @@ USER robot
 # Setup workspace
 WORKDIR /home/robot/ws
 
+# minconda
+RUN mkdir -p ~/miniconda3
+RUN wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh -O ~/miniconda3/miniconda.sh
+RUN bash ~/miniconda3/miniconda.sh -b -u -p ~/miniconda3
+RUN rm ~/miniconda3/miniconda.sh
+RUN source ~/miniconda3/bin/activate \
+  && conda tos accept --override-channels --channel https://repo.anaconda.com/pkgs/r \
+  && conda tos accept --override-channels --channel https://repo.anaconda.com/pkgs/main
+
+# biorbd and nlopt
+RUN source ~/miniconda3/bin/activate \
+  && conda install -c conda-forge python pygame biorbd pip \
+  && pip install nlopt
+
 # bashrc
-RUN echo "\
-export TERM=xterm-256color\n\
-source /opt/ros/${ROS_DISTRO}/setup.bash\n\
-source /home/robot/ws/install/setup.bash\n\
-alias build='cd /home/robot/ws/ && colcon build --parallel-workers 4 --symlink-install --cmake-args -DCMAKE_BUILD_TYPE=RelWithDebInfo && source install/setup.bash'\n\
-" >> /home/robot/.bashrc
+RUN printf '%s\n' \
+'export TERM=xterm-256color' \
+'source /opt/ros/${ROS_DISTRO}/setup.bash' \
+'source /home/robot/ws/install/setup.bash' \
+'source ~/miniconda3/bin/activate' \
+"alias build='cd /home/robot/ws/ && colcon build --parallel-workers 4 --symlink-install --cmake-args -DCMAKE_BUILD_TYPE=RelWithDebInfo && source install/setup.bash'" \
+>> /home/robot/.bashrc
 
 # GPU plugins in Gazebo
 ENV IGN_RENDER_ENGINE=ogre2
@@ -62,5 +75,5 @@ ENV DISPLAY=:1
 ENV QT_X11_NO_MITSHM=1
 ENV XAUTHORITY=/tmp/.docker.xauth
 
-SHELL ["/bin/bash", "-c"]
+SHELL [ "bin/bash", "-c" ]
 CMD ["tmux"]
